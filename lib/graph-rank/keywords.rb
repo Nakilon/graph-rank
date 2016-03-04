@@ -410,7 +410,7 @@ class GraphRank::Keywords < GraphRank::TextRank
     windowSize = options['windowSize'] || 1500
     pprVector = options['pprVector'] || []
 
-    puts("in buildnrun_rerank_graph - pprVector = #{pprVector}")f
+    puts("in buildnrun_rerank_graph - pprVector = #{pprVector}")
 
     #only of of these should be true
     textRankStyleEdgeWeighting = false
