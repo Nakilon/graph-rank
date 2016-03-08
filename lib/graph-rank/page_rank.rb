@@ -44,8 +44,9 @@ class GraphRank::PageRank
     @graph[dest] ||= []
 
     if weight == 0
-      puts("info - ADDING EDGE WITH ZERO WEIGHT - FIX ME TODO ")
-      #return false
+      #for info potentially if interested 
+      #puts("info - ADDING EDGE WITH ZERO WEIGHT")
+      #puts caller
     end 
     
     
@@ -76,11 +77,24 @@ class GraphRank::PageRank
       destinatins.each do |dest, edgeWeight|
         weightsSum += edgeWeight
       end
-      
-      #divide each edge by sum of edge weights
-      destinatins.each do |dest, edgeWeight|
-        @weights[source][dest] /= weightsSum
+
+      #if weightsum is 0 then all edges of this node (i.e. destination) have weight zero. So to we just need to keep them the same, so do nothing just return/
+      if weightsSum == 0
+
+        #return {note:"if weightsum is 0 then all edges of this node (i.e. destination) have weight zero. So to we just need to keep them the same, so do nothing just return"};
+        destinatins.each do |dest, edgeWeight|
+          @weights[source][dest] = 0
+        end
+
+      else
+        #divide each edge by sum of edge weights
+        destinatins.each do |dest, edgeWeight|
+          @weights[source][dest] /= weightsSum
+        end
+        
       end
+
+      
       
     end
     
@@ -115,7 +129,9 @@ class GraphRank::PageRank
       @max_it -= 1
     end
     puts("numiterations = #{numiterations}")
+    puts("@nodes = #{@nodes}")
     @nodes.sort_by {|k,v|v}.reverse
+    
   end
   
   def printNodeWeights  iterationNum
@@ -340,8 +356,7 @@ class GraphRank::PageRank
     
 
     @nodes.each do |k,v|
-
-      diff[k] = current[k] - @nodes[k] #if you are getting an error here that a current doesn't have k, it could be because you have nodes that are only sources in the graph and never destinations, these nodes will drop in one iteration (see *) causing previous @nodes and current_nodes to have different keys (*because @graph.each do |node(<=htis node will only be nodes that are destination to something, that's the way graph is built) ,links|)
+      diff[k] = current[k] - @nodes[k] #if you are getting an error here that a current doesn't have k, it could be because you have nodes that are only sources in the graph and never destinations, these nodes will drop in one iteration (see *) causing previous @nodes and current_nodes to have different keys (*because @graph.each do |node(<=htis node will only be nodes that are destination to something, that's the way graph is built) ,links|). You can see if this is the case by uncommenting the above 'for debug' piece of code which contains this snippet
     end
     total = 0.0
     diff.each { |k,v| total += diff[k] * v }
